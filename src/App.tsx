@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useRef, useState} from 'react';
 import './App.css';
 import {UniButton} from "./UniButton";
 import {start} from "repl";
@@ -6,105 +6,67 @@ import {start} from "repl";
 function App() {
     let [startValue, setStartValue] = useState(0)
     let [maxValue, setMaxValue] = useState(5)
-    let [counter, setCounter] = useState(1)
+    let [counter, setCounter] = useState(startValue)
 
-    const [enterState, setEnterState] = useState(false)
-    const [errorState, setErrorState] = useState(false)
-    const [counterState, setCounterState] = useState(true)
-    const [message, setMessage] = useState("")
+    const [edit, setEdit] = useState(false)
 
+    let [startValueI, setStartValueI] = useState(startValue)
+    let [maxValueI, setMaxValueI] = useState(maxValue)
 
-    const setValueHanlder = () => {
-        setEnterState(false)
-        setErrorState(false)
-        setCounterState(true)
+    const maxValueInputRef = useRef<HTMLInputElement>(null)
+    const startValueInputRef = useRef<HTMLInputElement>(null)
+
+    const set = () => {
+        const el = maxValueInputRef.current as HTMLInputElement
+        setMaxValue(+el.value)
+        const el2 = startValueInputRef.current as HTMLInputElement
+        setStartValue(+el2.value)
+        setEdit(false)
+
     }
-
-    const IncrementValueHandler = () => {
-        setCounter(counter + 1)
+    const incrementHandler = () => {
+        setCounter(counter+1)
     }
-    const ResetValueHandler = () => {
+    const resetHandler = () => {
         setCounter(startValue)
     }
-    const startValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setStartValue(+e.currentTarget.value) // пришлось заглушку с + написать, иначе не понимаю как, и почему стринг?
-        if (1 > startValue) {
 
-            setErrorState(true)
-            setCounterState(false)
-            setEnterState(false)
-            setMessage("error")
-            console.log(errorState, counterState, enterState, message)
-        } else {
-            setEnterState(true)
-            setCounterState(false)
-            setErrorState(false)
-            setMessage(" Error")
-        }
-
+    const maxValueHandler =(event: ChangeEvent<HTMLInputElement>) => {
+        setMaxValueI(+event.currentTarget.value)
+        setEdit(true)
     }
-    const maxValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setMaxValue(+e.currentTarget.value) // пришлось заглушку с + написать, иначе не понимаю как, и почему стринг?
-
-
+    const startValueHandler =(event: ChangeEvent<HTMLInputElement>) => {
+        setStartValueI(+event.currentTarget.value)
+        setEdit(true)
     }
 
-    const errorStateHanlder = () => {
-        if (startValue >= maxValue) {
-            return true
-        } else if (startValue < 0) {
-            return true
-        } else if (counterState) {
-            return counterState
-        }
-        return false
-    }
-    const IncrStateHanlder = () => {
-        if (counter >= maxValue) {
-            return true
-        } else if (errorState) {
-            return true
-        } else if (enterState) {
-            return true
-        }
-        return false
-    }
-    const resetStateHandler = () => {
-        if (errorState) {
-            return true
-        } else if (enterState) {
-            return true
-        }
-        return false
-    }
-
-    let incrementTitle = "Inc"
-    let resetTitle = "Reset"
-    let setTitle = "Set"
 
     return (
         <div className="App">
-            <div>
-                <h1> start value</h1>
-                <input value={startValue} type="number"
-                       onChange={startValueHandler}/>
-                <h1> max value</h1>
-                <input value={maxValue} type="number" onChange={maxValueHandler}/>
-                <p>
-                    <UniButton callback={setValueHanlder} title={setTitle} disabled={errorStateHanlder()}/>
-                </p>
+            <div className={"inline"}>
+                <div>
+                    <h1>Start value</h1>
+                    <input value={startValueI}  type={"number"} ref={startValueInputRef} onChange={startValueHandler} />
+
+                    <h1>max value</h1>
+                    <input  value ={maxValueI} type={"number"} ref={maxValueInputRef}  onChange={maxValueHandler}/>
+                    <p><UniButton
+                        callback={set}
+                        title={"set"}
+                        disabled={startValueI < 0 || maxValueI <= startValueI}/></p>
+                </div>
+
             </div>
-            <div>
-                <div className={counter === maxValue ? "increment" : ""}>
-                    {errorState ? message : counter}</div>
+            <div className={"inline"}>
+                <div className={counter >=maxValue ? "increment" : ""}>{counter}</div>
+                <UniButton callback={incrementHandler} title={"inc"} disabled={counter>=maxValue || edit} />
+                <UniButton callback={resetHandler} title={"reset"} disabled={edit} />
 
-                <UniButton callback={IncrementValueHandler} title={incrementTitle} disabled={IncrStateHanlder()}/>
-                <UniButton callback={ResetValueHandler} title={resetTitle} disabled={resetStateHandler()}/>
             </div>
-
-
         </div>
-    );
+
+    )
+
 }
 
 export default App;
