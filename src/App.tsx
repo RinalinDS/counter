@@ -1,6 +1,7 @@
 import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
 import './App.css';
-import {UniButton} from "./UniButton";
+import {IncrementAndReset} from "./IncrementAndReset";
+import {SetStartAndMaxValue} from "./SetStartAndMaxValue";
 
 
 function App() {
@@ -11,9 +12,15 @@ function App() {
     const [edit, setEdit] = useState(false)
     const [error, setError] = useState(false)
 
-    const incrementTitle = "Inc"
-    const resetTitle = "Reset"
-    const setTitle = "set"
+    const incrementButtonTitle = "Inc"
+    const resetButtonTitle = "Reset"
+    const setButtonTitle = "set"
+    const startValueButtonTitle = "Start value"
+    const maxValueButtonTitle = "Max value"
+    const errorMessage = "Incorrect value!"
+    const editMessage = "Enter value and press \"set\""
+
+
 
 
     let [startValueI, setStartValueI] = useState(startValue)
@@ -64,52 +71,38 @@ function App() {
 
     return (
         <div className="App">
-            <div>
-                <div>
+            <SetStartAndMaxValue
+                edit={edit}
+                error={error}
+                maxValueI={maxValueI}
+                maxValueHandlerSecondary={maxValueHandlerSecondary}
+                maxValueInputRef={maxValueInputRef}
+                startValueI={startValueI}
+                startValueInputRef={startValueInputRef}
+                setHandler={setHandler}
+                startValueHandlerSecondary={startValueHandlerSecondary}
+                setTitle={setButtonTitle}
+                startValueButtonTitle={startValueButtonTitle}
+                maxValueButtonTitle={maxValueButtonTitle}
+            />
+
+            <IncrementAndReset
+                incrementHandler={incrementHandler}
+                resetHandler={resetHandler}
+                counter={counter}
+                maxValue={maxValue}
+                error={error}
+                incrementTitle={incrementButtonTitle}
+                resetTitle={resetButtonTitle}
+                edit={edit}
+                errorMessage={errorMessage}
+                editMessage={editMessage}
 
 
-                    <h1>Start value</h1>
+
+            />
 
 
-                    <input className={error ?"increment" : ""} value={startValueI} type={"number"} ref={startValueInputRef}
-                           onChange={startValueHandlerSecondary}/>
-
-
-                    <h1>max value</h1>
-
-
-                    <input className={maxValueI <= startValueI || maxValueI < 0 ? "increment" : ""} value={maxValueI} type={"number"} ref={maxValueInputRef}
-                           onChange={maxValueHandlerSecondary}/>
-
-
-                    <p>
-
-                        <UniButton
-                            callback={setHandler}
-                            title={setTitle}
-                            disabled={startValueI < 0 || maxValueI <= startValueI || !edit}
-                        />
-
-                    </p>
-
-
-                </div>
-            </div>
-
-
-            <div>
-                <div className={counter >= maxValue && !edit || error ? "increment" : ""}>{
-                    error ? "incorrect value"
-                        : edit ? "enter value and press set"
-                            : counter}
-                </div>
-
-
-                <UniButton callback={incrementHandler} title={incrementTitle}
-                           disabled={counter >= maxValue || edit}/>
-                <UniButton callback={resetHandler} title={resetTitle} disabled={edit}/>
-
-            </div>
         </div>
 
     )
@@ -117,4 +110,5 @@ function App() {
 }
 
 export default App;
+
 
