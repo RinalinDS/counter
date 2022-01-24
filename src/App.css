@@ -1,21 +1,78 @@
-.App {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+
+.grid {
+
+    display: grid;
+    grid-template-areas:
+     "header header header header"
+    " block1 block2 block3 block4 "
+     "footer footer footer footer";
+
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 20% 1fr 1fr 20%;
+    justify-items: center;
 
 
 }
 
-.App div {
-  padding: 50px;
-  margin: 50px;
-  border: solid black 1px;
+.counter {
+    margin: 20px;
+    padding: 15px;
+    text-align: center;
+    border: 1px solid lightblue;
+    border-radius: 7px;
 }
 
+
+.values {
+    margin: 20px;
+    padding: 15px;
+    text-align: center;
+    border: 1px solid lightblue;
+    border-radius: 7px;
+}
+
+
+.buttons {
+    margin: 20px;
+    padding: 15px;
+    text-align: center;
+    border: 1px solid lightblue;
+    border-radius: 7px;
+    height: 40px;
+}
+
+.button1 {
+    display: block;
+    float: left;
+}
+
+.button2 {
+    display: block;
+    float: right;
+}
+
+
+.block1 {
+    grid-area: block2;
+    width: 400px;
+    height: 200px;
+    border: 3px solid lightblue;
+    align-items: center;
+    border-radius: 7px;
+}
+
+.block2 {
+    grid-area: block3;
+    width: 300px;
+    height: 200px;
+    border: 3px solid lightblue;
+    align-items: center;
+    border-radius: 7px;
+}
 
 
 .increment {
-  color: red
+    color: red
 }
 
 

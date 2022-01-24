@@ -5,9 +5,9 @@ import {SetStartAndMaxValue} from "./SetStartAndMaxValue";
 
 
 function App() {
-    let [startValue, setStartValue] = useState(0)
-    let [maxValue, setMaxValue] = useState(5)
-    let [counter, setCounter] = useState(startValue)
+    const [startValue, setStartValue] = useState(0)
+    const [maxValue, setMaxValue] = useState(5)
+    const [counter, setCounter] = useState(startValue)
 
     const [edit, setEdit] = useState(false)
     const [error, setError] = useState(false)
@@ -21,10 +21,8 @@ function App() {
     const editMessage = "Enter value and press \"set\""
 
 
-
-
-    let [startValueI, setStartValueI] = useState(startValue)
-    let [maxValueI, setMaxValueI] = useState(maxValue)
+    const [startValueI, setStartValueI] = useState(startValue)
+    const [maxValueI, setMaxValueI] = useState(maxValue)
 
     const maxValueInputRef = useRef<HTMLInputElement>(null)
     const startValueInputRef = useRef<HTMLInputElement>(null)
@@ -40,15 +38,31 @@ function App() {
         [startValueI, maxValueI, startValue, maxValue, counter]
     )
 
+    useEffect(() => {
+        const startValueFromLocalStorage = localStorage.getItem("startValue")
+        if (startValueFromLocalStorage) {
+            setStartValue(JSON.parse(startValueFromLocalStorage))
+            setStartValueI(JSON.parse(startValueFromLocalStorage))
+            setCounter(JSON.parse(startValueFromLocalStorage))
+        }
+        const maxValueFromLocalStorage = localStorage.getItem("maxValue")
+        if (maxValueFromLocalStorage) {
+            setMaxValue(JSON.parse(maxValueFromLocalStorage))
+            setMaxValueI(JSON.parse(maxValueFromLocalStorage))
+        }
+    }, [])
+
 
     const setHandler = () => {
         const el = maxValueInputRef.current as HTMLInputElement
         setMaxValue(+el.value)
         const el2 = startValueInputRef.current as HTMLInputElement
-        setStartValue(+el2.value) // i don't like +
-        setCounter(+el2.value) // i don't like this string
+        setStartValue(+el2.value) // I don't like +
+        setCounter(+el2.value) // I don't like this string
         setEdit(false)
         setError(false)
+        localStorage.setItem("startValue", JSON.stringify(+el2.value))
+        localStorage.setItem("maxValue", JSON.stringify(+el.value))
     }
 
     const incrementHandler = () => {
@@ -69,8 +83,10 @@ function App() {
     }
 
 
+
+
     return (
-        <div className="App">
+        <div className="grid app">
             <SetStartAndMaxValue
                 edit={edit}
                 error={error}
@@ -97,7 +113,6 @@ function App() {
                 edit={edit}
                 errorMessage={errorMessage}
                 editMessage={editMessage}
-
 
 
             />
