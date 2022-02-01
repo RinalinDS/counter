@@ -1,10 +1,19 @@
-import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import './App.css';
-import {IncrementAndReset} from "./IncrementAndReset";
-import {SetStartAndMaxValue} from "./SetStartAndMaxValue";
+import {IncrementAndReset} from "./components/IncrementAndReset";
+import {SetStartAndMaxValue} from "./components/SetStartAndMaxValue";
 
+
+const incrementButtonTitle = "Inc"
+const resetButtonTitle = "Reset"
+const setButtonTitle = "set"
+const startValueButtonTitle = "Start value"
+const maxValueButtonTitle = "Max value"
+const errorMessage = "Incorrect value!"
+const editMessage = "Enter value and press \"set\""
 
 function App() {
+
     const [startValue, setStartValue] = useState(0)
     const [maxValue, setMaxValue] = useState(5)
     const [counter, setCounter] = useState(startValue)
@@ -12,57 +21,36 @@ function App() {
     const [edit, setEdit] = useState(false)
     const [error, setError] = useState(false)
 
-    const incrementButtonTitle = "Inc"
-    const resetButtonTitle = "Reset"
-    const setButtonTitle = "set"
-    const startValueButtonTitle = "Start value"
-    const maxValueButtonTitle = "Max value"
-    const errorMessage = "Incorrect value!"
-    const editMessage = "Enter value and press \"set\""
-
-
-    const [startValueI, setStartValueI] = useState(startValue)
-    const [maxValueI, setMaxValueI] = useState(maxValue)
-
-    const maxValueInputRef = useRef<HTMLInputElement>(null)
-    const startValueInputRef = useRef<HTMLInputElement>(null)
-
     useEffect(() => {
-            if (startValueI < 0 || maxValueI <= startValueI) {
+            if (startValue < 0 || maxValue <= startValue) {
                 setError(true)
             } else {
                 setError(false)
             }
         }
-        ,
-        [startValueI, maxValueI, startValue, maxValue, counter]
+        ,        [startValue, maxValue]
     )
 
     useEffect(() => {
         const startValueFromLocalStorage = localStorage.getItem("startValue")
         if (startValueFromLocalStorage) {
             setStartValue(JSON.parse(startValueFromLocalStorage))
-            setStartValueI(JSON.parse(startValueFromLocalStorage))
             setCounter(JSON.parse(startValueFromLocalStorage))
         }
         const maxValueFromLocalStorage = localStorage.getItem("maxValue")
         if (maxValueFromLocalStorage) {
             setMaxValue(JSON.parse(maxValueFromLocalStorage))
-            setMaxValueI(JSON.parse(maxValueFromLocalStorage))
+
         }
     }, [])
 
 
     const setHandler = () => {
-        const el = maxValueInputRef.current as HTMLInputElement
-        setMaxValue(+el.value)
-        const el2 = startValueInputRef.current as HTMLInputElement
-        setStartValue(+el2.value) // I don't like +
-        setCounter(+el2.value) // I don't like this string
+        setCounter(startValue)
         setEdit(false)
         setError(false)
-        localStorage.setItem("startValue", JSON.stringify(+el2.value))
-        localStorage.setItem("maxValue", JSON.stringify(+el.value))
+        localStorage.setItem("startValue", JSON.stringify(startValue))
+        localStorage.setItem("maxValue", JSON.stringify(maxValue))
     }
 
     const incrementHandler = () => {
@@ -72,31 +60,29 @@ function App() {
         setCounter(startValue)
     }
 
-    const maxValueHandlerSecondary = (event: ChangeEvent<HTMLInputElement>) => {
-        setMaxValueI(+event.currentTarget.value)
+    const maxValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        setMaxValue(+event.currentTarget.value)
         setEdit(true)
     }
 
-    const startValueHandlerSecondary = (event: ChangeEvent<HTMLInputElement>) => {
-        setStartValueI(+event.currentTarget.value)
+    const startValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        setStartValue(+event.currentTarget.value)
         setEdit(true)
     }
-
-
 
 
     return (
-        <div className="grid app">
+        <div className="grid">
             <SetStartAndMaxValue
                 edit={edit}
                 error={error}
-                maxValueI={maxValueI}
-                maxValueHandlerSecondary={maxValueHandlerSecondary}
-                maxValueInputRef={maxValueInputRef}
-                startValueI={startValueI}
-                startValueInputRef={startValueInputRef}
+                maxValue={maxValue}
+                maxValueHandler={maxValueHandler}
+
+                startValue={startValue}
+
                 setHandler={setHandler}
-                startValueHandlerSecondary={startValueHandlerSecondary}
+                startValueHandler={startValueHandler}
                 setTitle={setButtonTitle}
                 startValueButtonTitle={startValueButtonTitle}
                 maxValueButtonTitle={maxValueButtonTitle}
