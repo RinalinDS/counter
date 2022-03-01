@@ -4,9 +4,7 @@ import React, {ChangeEvent} from "react";
 type propsType = {
     startValue: number
     maxValue: number
-
     startValueHandler: (event: ChangeEvent<HTMLInputElement>) => void
-
     maxValueHandler: (event: ChangeEvent<HTMLInputElement>) => void
     setHandler: () => void
     setTitle: string
@@ -18,6 +16,7 @@ type propsType = {
 
 }
 
+
 export function SetStartAndMaxValue({
                                         startValue, maxValue, startValueHandler,
                                          maxValueHandler,
@@ -25,11 +24,11 @@ export function SetStartAndMaxValue({
                                     }: propsType) {
     return (
         <div className='block1'>
-
             <div className={'values'}>
                 <div>
-                <span>{props.startValueButtonTitle}:  <input
-                    className={error ? "increment" : ""}
+                <span>{props.startValueButtonTitle}:
+                    <input
+                    className={maxValue <= startValue || startValue < 0  ? "increment" : ""}
                     value={startValue}
                     type={"number"}
                     onChange={startValueHandler}/>
@@ -46,12 +45,9 @@ export function SetStartAndMaxValue({
                 </span>
                 </div>
             </div>
-
-
             <div className={'buttons'}>
 
                 <UniButton
-
                     callback={setHandler}
                     title={setTitle}
                     disabled={startValue < 0 || maxValue <= startValue || !edit}

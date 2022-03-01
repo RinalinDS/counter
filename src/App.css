@@ -1,17 +1,12 @@
-
 .grid {
-
     display: grid;
     grid-template-areas:
      "header header header header"
     " block1 block2 block3 block4 "
      "footer footer footer footer";
-
     grid-template-rows: 1fr 1fr 1fr 1fr;
     grid-template-columns: 20% 1fr 1fr 20%;
     justify-items: center;
-
-
 }
 
 .counter {
@@ -71,7 +66,7 @@
 }
 
 
-.increment {
+.error {
     color: red
 }
 
