@@ -31,7 +31,7 @@ export function IncrementAndReset({
         }
     }
     const classNameToShow = () => {
-        if (counterValue === maxValue || startValue < 0 || startValue >=  maxValue) {
+        if (counterValue === maxValue && !edit || startValue < 0 || startValue >=  maxValue) {
             return 'error'
         } else {
             return ''
